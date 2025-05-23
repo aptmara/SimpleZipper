@@ -1536,7 +1536,20 @@ namespace SimpleZipper
 
             }
         }
-        private class CompressionArguments { public ZipOperationMode OperationMode { get; set; } public List<CompressionItem>? ItemsToCompress { get; set; } public string? OutputZipPath { get; set; } public Ionic.Zlib.CompressionLevel LevelIonic { get; set; } public bool EnablePassword { get; set; } public string? Password { get; set; } public string? ExistingZipPath { get; set; } public bool EnableComment { get; set; } public string? Comment { get; set; } public bool EnableSplit { get; set; } public long SplitSizeInBytes { get; set; } public long OriginalTotalSize { get; set; }
+        private class CompressionArguments
+        {
+            public ZipOperationMode OperationMode { get; set; }
+            public List<CompressionItem>? ItemsToCompress { get; set; }
+            public string? OutputZipPath { get; set; }
+            public Ionic.Zlib.CompressionLevel LevelIonic { get; set; }
+            public bool EnablePassword { get; set; }
+            public string? Password { get; set; }
+            public string? ExistingZipPath { get; set; }
+            public bool EnableComment { get; set; }
+            public string? Comment { get; set; }
+            public bool EnableSplit { get; set; }
+            public long SplitSizeInBytes { get; set; }
+            public long OriginalTotalSize { get; set; }
             public string? EffectiveOutputFolder { get; set; }
             public string? OutputZipFileName { get; set; }
         }
@@ -1913,6 +1926,11 @@ namespace SimpleZipper
         }
 
         private void dragDropOverlayPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void zipCommentTextBox_TextChanged(object sender, EventArgs e)
         {
 
         }

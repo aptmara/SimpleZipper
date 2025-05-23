@@ -249,7 +249,6 @@
             passwordTextBox.Enabled = false;
             passwordTextBox.Location = new Point(320, 74);
             passwordTextBox.Name = "passwordTextBox";
-            passwordTextBox.PasswordChar = '*';
             passwordTextBox.Size = new Size(347, 23);
             passwordTextBox.TabIndex = 15;
             // 
@@ -353,9 +352,9 @@
             zipCommentTextBox.Location = new Point(394, 112);
             zipCommentTextBox.Multiline = true;
             zipCommentTextBox.Name = "zipCommentTextBox";
-            zipCommentTextBox.PasswordChar = '*';
             zipCommentTextBox.Size = new Size(273, 60);
             zipCommentTextBox.TabIndex = 26;
+            zipCommentTextBox.TextChanged += zipCommentTextBox_TextChanged;
             // 
             // splitSizeNumericUpDown
             // 
