@@ -13,19 +13,19 @@ using Ionic.Zlib; // DotNetZip
 using System.Diagnostics;
 using System.Text;
 
-namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
+namespace SimpleZipper
 {
-    public partial class Form1 : Form // System.Windows.Forms.Form ‚ğŒp³
+    public partial class Form1 : Form // System.Windows.Forms.Form ã‚’ç¶™æ‰¿
     {
         private List<string> filesToCompress = new List<string>();
         private Label notificationLabel;
-        private System.Windows.Forms.Timer notificationTimer; // –¾¦“I‚Éw’è
+        private System.Windows.Forms.Timer notificationTimer; // æ˜ç¤ºçš„ã«æŒ‡å®š
         private Panel warningPanel;
         private Label warningMessageLabel;
-        private System.Windows.Forms.Timer animationTimer; // –¾¦“I‚Éw’è
-        private System.Windows.Forms.Timer displayTimer; // –¾¦“I‚Éw’è
+        private System.Windows.Forms.Timer animationTimer; // æ˜ç¤ºçš„ã«æŒ‡å®š
+        private System.Windows.Forms.Timer displayTimer; // æ˜ç¤ºçš„ã«æŒ‡å®š
         private int warningPanelTargetY = 0;
-        private int warningPanelHiddenY = -60; // warningPanel‚Ì‚‚³‚É‰‚¶‚Ä’²®
+        private int warningPanelHiddenY = -60; // warningPanelã®é«˜ã•ã«å¿œã˜ã¦èª¿æ•´
         private int animationStep = 5;
         private bool isWarningPanelDescending = false;
         private bool isWarningPanelAscending = false;
@@ -37,7 +37,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
         private string existingZipPathForAdd = null;
         private List<ThemeColors> availableThemes = new List<ThemeColors>();
         private enum LogLevel { Info, Warning, Error, Debug }
-        private enum NotificationType { Info, Warning, Error, Success } // ƒNƒ‰ƒX“à‚É’è‹`
+        private enum NotificationType { Info, Warning, Error, Success } // ã‚¯ãƒ©ã‚¹å†…ã«å®šç¾©
         private CompressionArguments argsPassedToWorker = null;
 
         public Form1()
@@ -59,14 +59,14 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             InitializeThemes();
 
             LoadSettings();
-            AppendLog("ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ‹N“®‚µ‚Ü‚µ‚½B", LogLevel.Info);
+            AppendLog("ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’èµ·å‹•ã—ã¾ã—ãŸã€‚", LogLevel.Info);
             InitializeFormDragDropEvents();
 
-            // --- ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚Ì–¾¦“I‚È“o˜^ ---
-            // ƒfƒUƒCƒi‚Å‚Ì•R•t‚¯‚ª‚¤‚Ü‚­‚¢‚©‚È‚¢ê‡‚âAŠmÀ‚É“o˜^‚·‚é‚½‚ß‚ÉƒR[ƒh‚Å’Ç‰Á‚µ‚Ü‚·B
-            // ‚à‚µƒfƒUƒCƒi‚Å³‚µ‚­•R•t‚¯‚ç‚ê‚Ä‚¢‚éê‡A‚±‚ê‚ç‚Ìs‚Íd•¡“o˜^‚É‚È‚é‰Â”\«‚ª‚ ‚è‚Ü‚·‚ªA
-            // ’Êí‚Í–â‘è‚ ‚è‚Ü‚¹‚ñi•¡”‰ñŒÄ‚Î‚ê‚é‚¾‚¯jB
-            // ƒGƒ‰[‰ğÁ‚Ì‚½‚ßA‚Ü‚¸‚ÍƒfƒUƒCƒi‚Ì•s—v‚È•R•t‚¯‚ğíœ‚·‚é‚±‚Æ‚ğ—Dæ‚µ‚Ä‚­‚¾‚³‚¢B
+            // --- ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒ³ãƒ‰ãƒ©ã®æ˜ç¤ºçš„ãªç™»éŒ² ---
+            // ãƒ‡ã‚¶ã‚¤ãƒŠã§ã®ç´ä»˜ã‘ãŒã†ã¾ãã„ã‹ãªã„å ´åˆã‚„ã€ç¢ºå®Ÿã«ç™»éŒ²ã™ã‚‹ãŸã‚ã«ã‚³ãƒ¼ãƒ‰ã§è¿½åŠ ã—ã¾ã™ã€‚
+            // ã‚‚ã—ãƒ‡ã‚¶ã‚¤ãƒŠã§æ­£ã—ãç´ä»˜ã‘ã‚‰ã‚Œã¦ã„ã‚‹å ´åˆã€ã“ã‚Œã‚‰ã®è¡Œã¯é‡è¤‡ç™»éŒ²ã«ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ãŒã€
+            // é€šå¸¸ã¯å•é¡Œã‚ã‚Šã¾ã›ã‚“ï¼ˆè¤‡æ•°å›å‘¼ã°ã‚Œã‚‹ã ã‘ï¼‰ã€‚
+            // ã‚¨ãƒ©ãƒ¼è§£æ¶ˆã®ãŸã‚ã€ã¾ãšã¯ãƒ‡ã‚¶ã‚¤ãƒŠã®ä¸è¦ãªç´ä»˜ã‘ã‚’å‰Šé™¤ã™ã‚‹ã“ã¨ã‚’å„ªå…ˆã—ã¦ãã ã•ã„ã€‚
 
             var selectFilesBtn = this.Controls.Find("selectFilesButton", true).FirstOrDefault() as Button;
             if (selectFilesBtn != null) selectFilesBtn.Click += new System.EventHandler(this.selectFilesButton_Click);
@@ -147,7 +147,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 logTb.ForeColor = theme.LogForeColor;
             }
             UpdateNotificationColorsWithCurrentTheme();
-            AppendLog($"ƒe[ƒ}•ÏX: {theme.Name}", LogLevel.Info);
+            AppendLog($"ãƒ†ãƒ¼ãƒå¤‰æ›´: {theme.Name}", LogLevel.Info);
         }
 
         private void UpdateNotificationColorsWithCurrentTheme()
@@ -202,7 +202,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             }
             else
             {
-                Color warningPanelBackColor = (theme.Name == "ƒ_[ƒN") ? Color.FromArgb(180, 180, 100, 30) : Color.FromArgb(180, 255, 150, 0);
+                Color warningPanelBackColor = (theme.Name == "ãƒ€ãƒ¼ã‚¯") ? Color.FromArgb(180, 180, 100, 30) : Color.FromArgb(180, 255, 150, 0);
                 warningPanel.BackColor = warningPanelBackColor;
                 warningMessageLabel.ForeColor = theme.WarningNotificationForeColor;
             }
@@ -438,7 +438,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             if (zipFileNameTb != null) zipFileNameTb.Enabled = isCreateNewMode;
             if (selectOutputFolderBtn != null) selectOutputFolderBtn.Enabled = isCreateNewMode;
 
-            if (compressBtn != null) compressBtn.Text = isCreateNewMode ? "ˆ³kÀs" : "ƒtƒ@ƒCƒ‹‚ğ’Ç‰Á";
+            if (compressBtn != null) compressBtn.Text = isCreateNewMode ? "åœ§ç¸®å®Ÿè¡Œ" : "ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è¿½åŠ ";
             if (isCreateNewMode) { existingZipPathForAdd = null; if (existingZipTb != null) existingZipTb.Clear(); }
 
             if (enableSplitCheckbox != null)
@@ -455,8 +455,8 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Title = "’Ç‰Áæ‚ÌZIPƒtƒ@ƒCƒ‹‚ğ‘I‘ğ";
-                openFileDialog.Filter = "ZIPƒtƒ@ƒCƒ‹ (*.zip)|*.zip";
+                openFileDialog.Title = "è¿½åŠ å…ˆã®ZIPãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ";
+                openFileDialog.Filter = "ZIPãƒ•ã‚¡ã‚¤ãƒ« (*.zip)|*.zip";
                 openFileDialog.CheckFileExists = true;
                 openFileDialog.CheckPathExists = true;
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
@@ -464,7 +464,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                     existingZipPathForAdd = openFileDialog.FileName;
                     var existingZipTb = this.Controls.Find("existingZipFileTextBox", true).FirstOrDefault() as TextBox;
                     if (existingZipTb != null) existingZipTb.Text = existingZipPathForAdd;
-                    AppendLog($"Šù‘¶ZIP‘I‘ğ: {existingZipPathForAdd}", LogLevel.Info);
+                    AppendLog($"æ—¢å­˜ZIPé¸æŠ: {existingZipPathForAdd}", LogLevel.Info);
                 }
             }
         }
@@ -597,7 +597,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 {
                     if (compressionLevelCtrl.Items.Count == 0)
                     {
-                        compressionLevelCtrl.Items.AddRange(new object[] { "•W€", "‘¬“x—Dæ", "‚ˆ³k" });
+                        compressionLevelCtrl.Items.AddRange(new object[] { "æ¨™æº–", "é€Ÿåº¦å„ªå…ˆ", "é«˜åœ§ç¸®" });
                     }
                     if (Properties.Settings.Default.LastCompressionLevelIndex >= 0 && Properties.Settings.Default.LastCompressionLevelIndex < compressionLevelCtrl.Items.Count)
                         compressionLevelCtrl.SelectedIndex = Properties.Settings.Default.LastCompressionLevelIndex;
@@ -680,7 +680,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 UpdateUIMode(currentZipMode);
 
             }
-            catch (Exception ex) { AppendLog("İ’è‚Ì“Ç‚İ‚İ‚É¸”s: " + ex.Message, LogLevel.Error); if (availableThemes.Any()) ApplyTheme(ThemeColors.LightTheme); }
+            catch (Exception ex) { AppendLog("è¨­å®šã®èª­ã¿è¾¼ã¿ã«å¤±æ•—: " + ex.Message, LogLevel.Error); if (availableThemes.Any()) ApplyTheme(ThemeColors.LightTheme); }
         }
         private void SaveSettings()
         {
@@ -715,20 +715,20 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 if (themeCb != null && themeCb.SelectedItem is ThemeColors selectedTheme) Properties.Settings.Default.CurrentThemeName = selectedTheme.Name;
                 Properties.Settings.Default.Save();
             }
-            catch (Exception ex) { AppendLog("İ’è‚Ì•Û‘¶‚É¸”s: " + ex.Message, LogLevel.Error); }
+            catch (Exception ex) { AppendLog("è¨­å®šã®ä¿å­˜ã«å¤±æ•—: " + ex.Message, LogLevel.Error); }
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (compressionWorker != null && compressionWorker.IsBusy)
             {
-                var result = MessageBox.Show("ˆ³kˆ—‚ªÀs’†‚Å‚·B–{“–‚ÉI—¹‚µ‚Ü‚·‚©H", "Šm”F", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                var result = MessageBox.Show("åœ§ç¸®å‡¦ç†ãŒå®Ÿè¡Œä¸­ã§ã™ã€‚æœ¬å½“ã«çµ‚äº†ã—ã¾ã™ã‹ï¼Ÿ", "ç¢ºèª", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 if (result == DialogResult.No)
                 {
                     e.Cancel = true;
                     return;
                 }
             }
-            AppendLog("ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğI—¹‚µ‚Ü‚·B", LogLevel.Info);
+            AppendLog("ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’çµ‚äº†ã—ã¾ã™ã€‚", LogLevel.Info);
             SaveSettings();
         }
         private void Form1_KeyDown(object sender, KeyEventArgs e)
@@ -779,33 +779,33 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
         {
             ProcessDroppedItems((string[])e.Data.GetData(DataFormats.FileDrop));
         }
-        // ’Êí‚Ì’Ê’miã•”ƒ‰ƒxƒ‹j‚ÆƒAƒjƒ[ƒVƒ‡ƒ“Œx‚ğo‚µ•ª‚¯‚éƒƒ\ƒbƒh
+        // é€šå¸¸ã®é€šçŸ¥ï¼ˆä¸Šéƒ¨ãƒ©ãƒ™ãƒ«ï¼‰ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³è­¦å‘Šã‚’å‡ºã—åˆ†ã‘ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
         private void ShowNotification(string message, NotificationType type)
         {
             ThemeColors currentTheme = (this.Controls.Find("themeComboBox", true).FirstOrDefault() as ComboBox)?.SelectedItem as ThemeColors ?? ThemeColors.LightTheme;
             if (type == NotificationType.Error || type == NotificationType.Warning)
             {
-                ShowAnimatedWarning(message, type); // ƒGƒ‰[‚âŒx‚ÍƒAƒjƒ[ƒVƒ‡ƒ“‚Å•\¦
+                ShowAnimatedWarning(message, type); // ã‚¨ãƒ©ãƒ¼ã‚„è­¦å‘Šã¯ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã§è¡¨ç¤º
             }
             else
             {
-                // ã•”ŒÅ’èƒ‰ƒxƒ‹‚Å‚Ì’Ê’m
-                if (notificationLabel == null || notificationTimer == null) return; // ‰Šú‰»ƒ`ƒFƒbƒN
+                // ä¸Šéƒ¨å›ºå®šãƒ©ãƒ™ãƒ«ã§ã®é€šçŸ¥
+                if (notificationLabel == null || notificationTimer == null) return; // åˆæœŸåŒ–ãƒã‚§ãƒƒã‚¯
                 notificationLabel.Text = message;
-                SetNotificationLabelColors(type, currentTheme); // ƒe[ƒ}‚ÉŠî‚Ã‚¢‚½Fİ’è
+                SetNotificationLabelColors(type, currentTheme); // ãƒ†ãƒ¼ãƒã«åŸºã¥ã„ãŸè‰²è¨­å®š
                 notificationLabel.Visible = true;
-                notificationTimer.Stop(); // Šù‘¶‚Ìƒ^ƒCƒ}[‚ğƒŠƒZƒbƒg
+                notificationTimer.Stop(); // æ—¢å­˜ã®ã‚¿ã‚¤ãƒãƒ¼ã‚’ãƒªã‚»ãƒƒãƒˆ
                 notificationTimer.Start();
             }
         }
 
-        // ƒAƒjƒ[ƒVƒ‡ƒ“•t‚«Œx•\¦ƒƒ\ƒbƒh
+        // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ä»˜ãè­¦å‘Šè¡¨ç¤ºãƒ¡ã‚½ãƒƒãƒ‰
         private void ShowAnimatedWarning(string message, NotificationType type)
         {
             ThemeColors currentTheme = (this.Controls.Find("themeComboBox", true).FirstOrDefault() as ComboBox)?.SelectedItem as ThemeColors ?? ThemeColors.LightTheme;
-            if (warningPanel == null || warningMessageLabel == null || animationTimer == null || displayTimer == null) return; // ‰Šú‰»ƒ`ƒFƒbƒN
+            if (warningPanel == null || warningMessageLabel == null || animationTimer == null || displayTimer == null) return; // åˆæœŸåŒ–ãƒã‚§ãƒƒã‚¯
 
-            // Šù‘¶‚ÌƒAƒjƒ[ƒVƒ‡ƒ“‚ª‚ ‚ê‚Î’â~
+            // æ—¢å­˜ã®ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ãŒã‚ã‚Œã°åœæ­¢
             if (isWarningPanelDescending || (isWarningPanelAscending && warningPanel.Location.Y < warningPanelTargetY))
             {
                 animationTimer.Stop();
@@ -813,22 +813,22 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             }
 
             warningMessageLabel.Text = message;
-            SetAnimatedWarningColors(type, currentTheme); // ƒe[ƒ}‚ÉŠî‚Ã‚¢‚½Fİ’è
+            SetAnimatedWarningColors(type, currentTheme); // ãƒ†ãƒ¼ãƒã«åŸºã¥ã„ãŸè‰²è¨­å®š
 
-            warningPanel.Location = new Point(0, warningPanelHiddenY); // ŠJnˆÊ’uƒŠƒZƒbƒg
+            warningPanel.Location = new Point(0, warningPanelHiddenY); // é–‹å§‹ä½ç½®ãƒªã‚»ãƒƒãƒˆ
             warningPanel.Visible = true;
-            warningPanel.BringToFront(); // Å‘O–Ê‚É
-            if (notificationLabel != null && notificationLabel.Visible) notificationLabel.SendToBack(); // ’Êí’Ê’m‚ªŒ©‚¦‚Ä‚¢‚½‚ç”w–Ê‚É
+            warningPanel.BringToFront(); // æœ€å‰é¢ã«
+            if (notificationLabel != null && notificationLabel.Visible) notificationLabel.SendToBack(); // é€šå¸¸é€šçŸ¥ãŒè¦‹ãˆã¦ã„ãŸã‚‰èƒŒé¢ã«
 
             isWarningPanelDescending = true;
             isWarningPanelAscending = false;
-            animationTimer.Start(); // ƒAƒjƒ[ƒVƒ‡ƒ“ŠJn
+            animationTimer.Start(); // ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³é–‹å§‹
         }
 
         private void ProcessDroppedItems(string[] droppedItems)
         {
             if (droppedItems == null) return;
-            AppendLog($"ƒhƒ‰ƒbƒO•ƒhƒƒbƒv‘€ì: {droppedItems.Length} ƒAƒCƒeƒ€", LogLevel.Info);
+            AppendLog($"ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—æ“ä½œ: {droppedItems.Length} ã‚¢ã‚¤ãƒ†ãƒ ", LogLevel.Info);
             var recursiveAddCtrl = this.Controls.Find("recursiveAddCheckBox", true).FirstOrDefault() as CheckBox;
             bool isRecursive = (recursiveAddCtrl?.Checked) ?? true;
             bool directoryDroppedWithoutRecursiveSupport = false;
@@ -843,7 +843,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 }
             }
             if (directoryDroppedWithoutRecursiveSupport)
-                ShowNotification("ƒtƒHƒ‹ƒ_‚ª’Ç‰Á‚³‚ê‚Ü‚µ‚½‚ªAÄ‹AƒIƒvƒVƒ‡ƒ“‚ª–³Œø‚Ì‚½‚ß’¼‰º‚Ìƒtƒ@ƒCƒ‹‚Ì‚İ‚ª‘ÎÛ‚Å‚·i‚à‚µ‚ ‚ê‚ÎjB", NotificationType.Info);
+                ShowNotification("ãƒ•ã‚©ãƒ«ãƒ€ãŒè¿½åŠ ã•ã‚Œã¾ã—ãŸãŒã€å†å¸°ã‚ªãƒ—ã‚·ãƒ§ãƒ³ãŒç„¡åŠ¹ã®ãŸã‚ç›´ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ã¿ãŒå¯¾è±¡ã§ã™ï¼ˆã‚‚ã—ã‚ã‚Œã°ï¼‰ã€‚", NotificationType.Info);
         }
         private void AddFileToList(string filePath)
         {
@@ -852,12 +852,12 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 filesToCompress.Add(filePath);
                 var sflb = this.Controls.Find("selectedFilesListBox", true).FirstOrDefault() as ListBox;
                 if (sflb != null) sflb.Items.Add(Path.GetFileName(filePath));
-                AppendLog($"ƒtƒ@ƒCƒ‹’Ç‰Á: {filePath}", LogLevel.Debug);
+                AppendLog($"ãƒ•ã‚¡ã‚¤ãƒ«è¿½åŠ : {filePath}", LogLevel.Debug);
             }
         }
         private void AddDirectoryFilesToList(string directoryPath, bool recursive)
         {
-            AppendLog($"ƒtƒHƒ‹ƒ_“à‚Ìƒtƒ@ƒCƒ‹ŒŸõŠJn: {directoryPath} (Ä‹A: {recursive})", LogLevel.Debug);
+            AppendLog($"ãƒ•ã‚©ãƒ«ãƒ€å†…ã®ãƒ•ã‚¡ã‚¤ãƒ«æ¤œç´¢é–‹å§‹: {directoryPath} (å†å¸°: {recursive})", LogLevel.Debug);
             try
             {
                 foreach (string file in Directory.GetFiles(directoryPath)) AddFileToList(file);
@@ -866,17 +866,17 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                     foreach (string subDirectory in Directory.GetDirectories(directoryPath)) AddDirectoryFilesToList(subDirectory, true);
                 }
             }
-            catch (Exception ex) { ShowNotification($"ƒtƒHƒ‹ƒ_ƒAƒNƒZƒXƒGƒ‰[ ({Path.GetFileName(directoryPath)}): {ex.Message}", NotificationType.Warning); AppendLog($"ƒtƒHƒ‹ƒ_ƒAƒNƒZƒXƒGƒ‰[: {directoryPath} - {ex.Message}", LogLevel.Error); }
-            AppendLog($"ƒtƒHƒ‹ƒ_“à‚Ìƒtƒ@ƒCƒ‹ŒŸõI—¹: {directoryPath}", LogLevel.Debug);
+            catch (Exception ex) { ShowNotification($"ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¯ã‚»ã‚¹ã‚¨ãƒ©ãƒ¼ ({Path.GetFileName(directoryPath)}): {ex.Message}", NotificationType.Warning); AppendLog($"ãƒ•ã‚©ãƒ«ãƒ€ã‚¢ã‚¯ã‚»ã‚¹ã‚¨ãƒ©ãƒ¼: {directoryPath} - {ex.Message}", LogLevel.Error); }
+            AppendLog($"ãƒ•ã‚©ãƒ«ãƒ€å†…ã®ãƒ•ã‚¡ã‚¤ãƒ«æ¤œç´¢çµ‚äº†: {directoryPath}", LogLevel.Debug);
         }
         private void selectFilesButton_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Multiselect = true; openFileDialog.Title = "ˆ³k‚·‚éƒtƒ@ƒCƒ‹‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢"; openFileDialog.Filter = "‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹ (*.*)|*.*";
+                openFileDialog.Multiselect = true; openFileDialog.Title = "åœ§ç¸®ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠã—ã¦ãã ã•ã„"; openFileDialog.Filter = "ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ« (*.*)|*.*";
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    AppendLog($"ƒtƒ@ƒCƒ‹‘I‘ğƒ_ƒCƒAƒƒO: {openFileDialog.FileNames.Length} ƒtƒ@ƒCƒ‹‘I‘ğ", LogLevel.Info);
+                    AppendLog($"ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°: {openFileDialog.FileNames.Length} ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠ", LogLevel.Info);
                     foreach (string fileName in openFileDialog.FileNames) AddFileToList(fileName);
                 }
             }
@@ -887,7 +887,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             if (outputFolderTb == null) return;
             using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
-                folderBrowserDialog.Description = "ZIPƒtƒ@ƒCƒ‹‚Ì•Û‘¶æƒtƒHƒ‹ƒ_‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢";
+                folderBrowserDialog.Description = "ZIPãƒ•ã‚¡ã‚¤ãƒ«ã®ä¿å­˜å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠã—ã¦ãã ã•ã„";
                 if (folderBrowserDialog.ShowDialog() == DialogResult.OK) outputFolderTb.Text = folderBrowserDialog.SelectedPath;
             }
         }
@@ -907,19 +907,19 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                     sflb.Items.RemoveAt(selectedIndex);
                 }
             }
-            AppendLog($"{selectedIndices.Count} ŒÂ‚Ìƒtƒ@ƒCƒ‹‚ğ‘I‘ğƒŠƒXƒg‚©‚çíœ‚µ‚Ü‚µ‚½B", LogLevel.Debug);
+            AppendLog($"{selectedIndices.Count} å€‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠãƒªã‚¹ãƒˆã‹ã‚‰å‰Šé™¤ã—ã¾ã—ãŸã€‚", LogLevel.Debug);
         }
         private void clearFileListButton_Click(object sender, EventArgs e)
         {
             var sflb = this.Controls.Find("selectedFilesListBox", true).FirstOrDefault() as ListBox;
             if (sflb != null) sflb.Items.Clear();
             filesToCompress.Clear();
-            AppendLog("ƒtƒ@ƒCƒ‹ƒŠƒXƒg‚ğƒNƒŠƒA‚µ‚Ü‚µ‚½B", LogLevel.Debug);
+            AppendLog("ãƒ•ã‚¡ã‚¤ãƒ«ãƒªã‚¹ãƒˆã‚’ã‚¯ãƒªã‚¢ã—ã¾ã—ãŸã€‚", LogLevel.Debug);
         }
         private void compressButton_Click(object sender, EventArgs e)
         {
-            if (compressionWorker.IsBusy) { ShowNotification("ˆ³kˆ—‚ªÀs’†‚Å‚·B", NotificationType.Info); return; }
-            if (filesToCompress.Count == 0) { ShowNotification((currentZipMode == ZipOperationMode.CreateNew ? "ˆ³k" : "’Ç‰Á") + "‚·‚éƒtƒ@ƒCƒ‹‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", NotificationType.Warning); return; }
+            if (compressionWorker.IsBusy) { ShowNotification("åœ§ç¸®å‡¦ç†ãŒå®Ÿè¡Œä¸­ã§ã™ã€‚", NotificationType.Info); return; }
+            if (filesToCompress.Count == 0) { ShowNotification((currentZipMode == ZipOperationMode.CreateNew ? "åœ§ç¸®" : "è¿½åŠ ") + "ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", NotificationType.Warning); return; }
 
             var outputFolderTb = this.Controls.Find("outputFolderTextBox", true).FirstOrDefault() as TextBox;
             var zipFileNameTb = this.Controls.Find("zipFileNameTextBox", true).FirstOrDefault() as TextBox;
@@ -927,38 +927,38 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             string outputZipPathValue; string effectiveOutputFolder; string effectiveZipFileName;
             if (currentZipMode == ZipOperationMode.AddToExisting)
             {
-                if (string.IsNullOrWhiteSpace(existingZipPathForAdd) || !File.Exists(existingZipPathForAdd)) { ShowNotification("’Ç‰Áæ‚Ì—LŒø‚ÈZIPƒtƒ@ƒCƒ‹‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", NotificationType.Warning); return; }
+                if (string.IsNullOrWhiteSpace(existingZipPathForAdd) || !File.Exists(existingZipPathForAdd)) { ShowNotification("è¿½åŠ å…ˆã®æœ‰åŠ¹ãªZIPãƒ•ã‚¡ã‚¤ãƒ«ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", NotificationType.Warning); return; }
                 outputZipPathValue = existingZipPathForAdd; effectiveOutputFolder = Path.GetDirectoryName(outputZipPathValue); effectiveZipFileName = Path.GetFileName(outputZipPathValue);
             }
             else
             {
-                if (outputFolderTb == null || string.IsNullOrWhiteSpace(outputFolderTb.Text)) { ShowNotification("•Û‘¶æƒtƒHƒ‹ƒ_‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", NotificationType.Warning); return; }
-                if (zipFileNameTb == null) { ShowNotification("ZIPƒtƒ@ƒCƒ‹–¼ƒeƒLƒXƒgƒ{ƒbƒNƒX‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB", NotificationType.Error); return; }
+                if (outputFolderTb == null || string.IsNullOrWhiteSpace(outputFolderTb.Text)) { ShowNotification("ä¿å­˜å…ˆãƒ•ã‚©ãƒ«ãƒ€ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", NotificationType.Warning); return; }
+                if (zipFileNameTb == null) { ShowNotification("ZIPãƒ•ã‚¡ã‚¤ãƒ«åãƒ†ã‚­ã‚¹ãƒˆãƒœãƒƒã‚¯ã‚¹ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚", NotificationType.Error); return; }
                 effectiveZipFileName = zipFileNameTb.Text;
-                if (string.IsNullOrWhiteSpace(effectiveZipFileName)) { ShowNotification("ZIPƒtƒ@ƒCƒ‹–¼‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B", NotificationType.Warning); return; }
+                if (string.IsNullOrWhiteSpace(effectiveZipFileName)) { ShowNotification("ZIPãƒ•ã‚¡ã‚¤ãƒ«åã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚", NotificationType.Warning); return; }
                 if (!effectiveZipFileName.EndsWith(".zip", StringComparison.OrdinalIgnoreCase)) effectiveZipFileName += ".zip";
                 outputZipPathValue = Path.Combine(outputFolderTb.Text, effectiveZipFileName); effectiveOutputFolder = outputFolderTb.Text;
                 if (File.Exists(outputZipPathValue))
                 {
-                    DialogResult userChoice = MessageBox.Show($"ƒtƒ@ƒCƒ‹ '{effectiveZipFileName}' ‚ÍŠù‚É‘¶İ‚µ‚Ü‚·B\n\n‚Í‚¢: ã‘‚«‚µ‚Ü‚·\n‚¢‚¢‚¦: V‚µ‚¢–¼‘O‚Å•Û‘¶‚µ‚Ü‚·\nƒLƒƒƒ“ƒZƒ‹: ˆ—‚ğ’†~‚µ‚Ü‚·", "ƒtƒ@ƒCƒ‹–¼‚Ì‹£‡", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
+                    DialogResult userChoice = MessageBox.Show($"ãƒ•ã‚¡ã‚¤ãƒ« '{effectiveZipFileName}' ã¯æ—¢ã«å­˜åœ¨ã—ã¾ã™ã€‚\n\nã¯ã„: ä¸Šæ›¸ãã—ã¾ã™\nã„ã„ãˆ: æ–°ã—ã„åå‰ã§ä¿å­˜ã—ã¾ã™\nã‚­ãƒ£ãƒ³ã‚»ãƒ«: å‡¦ç†ã‚’ä¸­æ­¢ã—ã¾ã™", "ãƒ•ã‚¡ã‚¤ãƒ«åã®ç«¶åˆ", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Warning);
                     if (userChoice == DialogResult.No) { outputZipPathValue = GetUniqueFileName(outputFolderTb.Text, effectiveZipFileName); zipFileNameTb.Text = Path.GetFileName(outputZipPathValue); }
-                    else if (userChoice == DialogResult.Cancel) { ShowNotification("ˆ³kˆ—‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚Ü‚µ‚½B", NotificationType.Info); return; }
+                    else if (userChoice == DialogResult.Cancel) { ShowNotification("åœ§ç¸®å‡¦ç†ã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ã¾ã—ãŸã€‚", NotificationType.Info); return; }
                 }
             }
-            AppendLog($"ˆ³kˆ—ŠJnƒ{ƒ^ƒ“ƒNƒŠƒbƒNBƒ‚[ƒh: {currentZipMode}", LogLevel.Info);
-            if (currentZipMode == ZipOperationMode.CreateNew) AppendLog($"V‹KZIPì¬: {outputZipPathValue}", LogLevel.Info); else AppendLog($"Šù‘¶ZIP‚É’Ç‰Á: {existingZipPathForAdd}", LogLevel.Info);
+            AppendLog($"åœ§ç¸®å‡¦ç†é–‹å§‹ãƒœã‚¿ãƒ³ã‚¯ãƒªãƒƒã‚¯ã€‚ãƒ¢ãƒ¼ãƒ‰: {currentZipMode}", LogLevel.Info);
+            if (currentZipMode == ZipOperationMode.CreateNew) AppendLog($"æ–°è¦ZIPä½œæˆ: {outputZipPathValue}", LogLevel.Info); else AppendLog($"æ—¢å­˜ZIPã«è¿½åŠ : {existingZipPathForAdd}", LogLevel.Info);
             Ionic.Zlib.CompressionLevel ionicLevel = Ionic.Zlib.CompressionLevel.Default;
             var compressionLevelControl = this.Controls.Find("compressionLevelComboBox", true).FirstOrDefault() as ComboBox;
-            if (compressionLevelControl != null && compressionLevelControl.SelectedItem != null) { switch (compressionLevelControl.SelectedItem.ToString()) { case "‘¬“x—Dæ": ionicLevel = Ionic.Zlib.CompressionLevel.BestSpeed; break; case "‚ˆ³k": ionicLevel = Ionic.Zlib.CompressionLevel.BestCompression; break; } }
-            AppendLog($"ˆ³kƒŒƒxƒ‹: {(compressionLevelControl?.SelectedItem?.ToString() ?? "ƒfƒtƒHƒ‹ƒg")}", LogLevel.Debug);
+            if (compressionLevelControl != null && compressionLevelControl.SelectedItem != null) { switch (compressionLevelControl.SelectedItem.ToString()) { case "é€Ÿåº¦å„ªå…ˆ": ionicLevel = Ionic.Zlib.CompressionLevel.BestSpeed; break; case "é«˜åœ§ç¸®": ionicLevel = Ionic.Zlib.CompressionLevel.BestCompression; break; } }
+            AppendLog($"åœ§ç¸®ãƒ¬ãƒ™ãƒ«: {(compressionLevelControl?.SelectedItem?.ToString() ?? "ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ")}", LogLevel.Debug);
             bool enablePassword = false; string password = null;
             var enablePasswordCtrl = this.Controls.Find("enablePasswordCheckBox", true).FirstOrDefault() as CheckBox; var passwordCtrl = this.Controls.Find("passwordTextBox", true).FirstOrDefault() as TextBox;
-            if (enablePasswordCtrl != null && enablePasswordCtrl.Checked) { if (passwordCtrl != null && !string.IsNullOrWhiteSpace(passwordCtrl.Text)) { enablePassword = true; password = passwordCtrl.Text; } else { ShowNotification("ƒpƒXƒ[ƒh‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", NotificationType.Warning); return; } }
-            AppendLog($"ƒpƒXƒ[ƒh•ÛŒì: {enablePassword}", LogLevel.Debug);
+            if (enablePasswordCtrl != null && enablePasswordCtrl.Checked) { if (passwordCtrl != null && !string.IsNullOrWhiteSpace(passwordCtrl.Text)) { enablePassword = true; password = passwordCtrl.Text; } else { ShowNotification("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", NotificationType.Warning); return; } }
+            AppendLog($"ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ä¿è­·: {enablePassword}", LogLevel.Debug);
             bool enableComment = false; string zipComment = null;
             var enableCommentCtrl = this.Controls.Find("enableZipCommentCheckBox", true).FirstOrDefault() as CheckBox; var commentTextCtrl = this.Controls.Find("zipCommentTextBox", true).FirstOrDefault() as TextBox;
             if (enableCommentCtrl != null && enableCommentCtrl.Checked) { if (commentTextCtrl != null) { enableComment = true; zipComment = commentTextCtrl.Text; } }
-            AppendLog($"ZIPƒRƒƒ“ƒg: {enableComment}", LogLevel.Debug);
+            AppendLog($"ZIPã‚³ãƒ¡ãƒ³ãƒˆ: {enableComment}", LogLevel.Debug);
             long splitSizeInBytes = 0; bool enableSplit = false;
             var enableSplitCtrl = this.Controls.Find("enableSplitZipCheckBox", true).FirstOrDefault() as CheckBox;
             if (currentZipMode == ZipOperationMode.CreateNew && enableSplitCtrl != null && enableSplitCtrl.Checked)
@@ -968,15 +968,15 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 {
                     long sizeValue = (long)splitSizeNumCtrl.Value; string unit = splitUnitCbCtrl.SelectedItem.ToString();
                     if (unit == "MB") splitSizeInBytes = sizeValue * 1024 * 1024; else if (unit == "KB") splitSizeInBytes = sizeValue * 1024;
-                    if (splitSizeInBytes <= 0) { enableSplit = false; splitSizeInBytes = 0; AppendLog("•ªŠ„ƒTƒCƒY‚ª–³Œø‚È‚½‚ßA•ªŠ„‚µ‚Ü‚¹‚ñB", LogLevel.Warning); }
-                    else AppendLog($"ZIP•ªŠ„—LŒøBƒTƒCƒY: {sizeValue} {unit} ({splitSizeInBytes} bytes)", LogLevel.Debug);
+                    if (splitSizeInBytes <= 0) { enableSplit = false; splitSizeInBytes = 0; AppendLog("åˆ†å‰²ã‚µã‚¤ã‚ºãŒç„¡åŠ¹ãªãŸã‚ã€åˆ†å‰²ã—ã¾ã›ã‚“ã€‚", LogLevel.Warning); }
+                    else AppendLog($"ZIPåˆ†å‰²æœ‰åŠ¹ã€‚ã‚µã‚¤ã‚º: {sizeValue} {unit} ({splitSizeInBytes} bytes)", LogLevel.Debug);
                 }
                 else enableSplit = false;
             }
             var progressBar = this.Controls.Find("compressionProgressBar", true).FirstOrDefault() as ProgressBar; if (progressBar != null) { progressBar.Value = 0; progressBar.Visible = true; }
             var statsLabel = this.Controls.Find("compressionStatsLabel", true).FirstOrDefault() as Label; if (statsLabel != null) statsLabel.Visible = false;
             SetUIEnabledState(false);
-            long originalTotalSizeBytes = 0; foreach (string filePath in filesToCompress) if (File.Exists(filePath)) try { originalTotalSizeBytes += new FileInfo(filePath).Length; } catch { AppendLog($"ƒTƒCƒYæ“¾ƒGƒ‰[(–‘O): {filePath}", LogLevel.Warning); }
+            long originalTotalSizeBytes = 0; foreach (string filePath in filesToCompress) if (File.Exists(filePath)) try { originalTotalSizeBytes += new FileInfo(filePath).Length; } catch { AppendLog($"ã‚µã‚¤ã‚ºå–å¾—ã‚¨ãƒ©ãƒ¼(äº‹å‰): {filePath}", LogLevel.Warning); }
 
             CompressionArguments args = new CompressionArguments { OperationMode = currentZipMode, FilesToCompress = new List<string>(filesToCompress), OutputZipPath = outputZipPathValue, LevelIonic = ionicLevel, EnablePassword = enablePassword, Password = password, ExistingZipPath = (currentZipMode == ZipOperationMode.AddToExisting) ? existingZipPathForAdd : null, EnableComment = enableComment, Comment = zipComment, EnableSplit = enableSplit, SplitSizeInBytes = splitSizeInBytes, OriginalTotalSize = originalTotalSizeBytes };
             argsPassedToWorker = args;
@@ -1031,38 +1031,38 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
             {
                 if (args.OperationMode == ZipOperationMode.CreateNew)
                 {
-                    worker.ReportProgress(0, $"V‹KZIP '{Path.GetFileName(args.OutputZipPath)}' ì¬ŠJn...");
+                    worker.ReportProgress(0, $"æ–°è¦ZIP '{Path.GetFileName(args.OutputZipPath)}' ä½œæˆé–‹å§‹...");
                     using (Ionic.Zip.ZipFile zip = new Ionic.Zip.ZipFile(System.Text.Encoding.GetEncoding("shift_jis")))
                     {
                         if (args.EnablePassword && !string.IsNullOrEmpty(args.Password)) { zip.Password = args.Password; zip.Encryption = EncryptionAlgorithm.WinZipAes256; }
                         zip.CompressionLevel = args.LevelIonic; if (args.EnableComment) zip.Comment = args.Comment;
                         if (args.EnableSplit && args.SplitSizeInBytes > 0)
                         {
-                            if (args.SplitSizeInBytes > Int32.MaxValue) { worker.ReportProgress(0, "Œx: •ªŠ„ƒTƒCƒY‚ª‘å‚«‚·‚¬‚é‚½‚ßAInt32.MaxValue‚ªg—p‚³‚ê‚Ü‚·B"); zip.MaxOutputSegmentSize = Int32.MaxValue; }
-                            else if (args.SplitSizeInBytes < 65536 && args.SplitSizeInBytes > 0) { worker.ReportProgress(0, "Œx: •ªŠ„ƒTƒCƒY‚ª¬‚³‚·‚¬‚é‚½‚ßA64KB‚ªg—p‚³‚ê‚Ü‚·B"); zip.MaxOutputSegmentSize = 65536; }
+                            if (args.SplitSizeInBytes > Int32.MaxValue) { worker.ReportProgress(0, "è­¦å‘Š: åˆ†å‰²ã‚µã‚¤ã‚ºãŒå¤§ãã™ãã‚‹ãŸã‚ã€Int32.MaxValueãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚"); zip.MaxOutputSegmentSize = Int32.MaxValue; }
+                            else if (args.SplitSizeInBytes < 65536 && args.SplitSizeInBytes > 0) { worker.ReportProgress(0, "è­¦å‘Š: åˆ†å‰²ã‚µã‚¤ã‚ºãŒå°ã•ã™ãã‚‹ãŸã‚ã€64KBãŒä½¿ç”¨ã•ã‚Œã¾ã™ã€‚"); zip.MaxOutputSegmentSize = 65536; }
                             else if (args.SplitSizeInBytes > 0) { zip.MaxOutputSegmentSize = (int)args.SplitSizeInBytes; }
                         }
-                        zip.SaveProgress += (s, progressArgs) => { if (worker.CancellationPending) progressArgs.Cancel = true; if (progressArgs.EventType == ZipProgressEventType.Saving_BeforeWriteEntry) worker.ReportProgress(progressArgs.EntriesTotal > 0 ? progressArgs.EntriesSaved * 100 / progressArgs.EntriesTotal : 0, $"ƒtƒ@ƒCƒ‹ˆ³k’†: {progressArgs.CurrentEntry.FileName}"); else if (progressArgs.EventType == ZipProgressEventType.Saving_AfterWriteEntry) { filesProcessed++; worker.ReportProgress(totalFiles > 0 ? filesProcessed * 100 / totalFiles : 0, $"Š®—¹: {progressArgs.CurrentEntry.FileName}"); } else if (progressArgs.EventType == ZipProgressEventType.Saving_Completed) worker.ReportProgress(100); };
+                        zip.SaveProgress += (s, progressArgs) => { if (worker.CancellationPending) progressArgs.Cancel = true; if (progressArgs.EventType == ZipProgressEventType.Saving_BeforeWriteEntry) worker.ReportProgress(progressArgs.EntriesTotal > 0 ? progressArgs.EntriesSaved * 100 / progressArgs.EntriesTotal : 0, $"ãƒ•ã‚¡ã‚¤ãƒ«åœ§ç¸®ä¸­: {progressArgs.CurrentEntry.FileName}"); else if (progressArgs.EventType == ZipProgressEventType.Saving_AfterWriteEntry) { filesProcessed++; worker.ReportProgress(totalFiles > 0 ? filesProcessed * 100 / totalFiles : 0, $"å®Œäº†: {progressArgs.CurrentEntry.FileName}"); } else if (progressArgs.EventType == ZipProgressEventType.Saving_Completed) worker.ReportProgress(100); };
                         foreach (string filePath in args.FilesToCompress) if (File.Exists(filePath)) zip.AddFile(filePath, "");
-                        zip.Save(args.OutputZipPath); worker.ReportProgress(100, $"V‹KZIP '{Path.GetFileName(args.OutputZipPath)}'{(args.EnableSplit && args.SplitSizeInBytes > 0 ? " (•ªŠ„)" : "")} ì¬Š®—¹B");
+                        zip.Save(args.OutputZipPath); worker.ReportProgress(100, $"æ–°è¦ZIP '{Path.GetFileName(args.OutputZipPath)}'{(args.EnableSplit && args.SplitSizeInBytes > 0 ? " (åˆ†å‰²)" : "")} ä½œæˆå®Œäº†ã€‚");
                     }
                 }
                 else
                 {
-                    worker.ReportProgress(0, $"Šù‘¶ZIP '{Path.GetFileName(args.ExistingZipPath)}' ‚Ö‚Ì’Ç‰ÁŠJn...");
+                    worker.ReportProgress(0, $"æ—¢å­˜ZIP '{Path.GetFileName(args.ExistingZipPath)}' ã¸ã®è¿½åŠ é–‹å§‹...");
                     using (Ionic.Zip.ZipFile zip = Ionic.Zip.ZipFile.Read(args.ExistingZipPath))
                     {
                         if (args.EnablePassword && !string.IsNullOrEmpty(args.Password)) { zip.Password = args.Password; zip.Encryption = EncryptionAlgorithm.WinZipAes256; }
                         zip.CompressionLevel = args.LevelIonic; if (args.EnableComment) zip.Comment = args.Comment;
-                        zip.SaveProgress += (s, progressArgs) => { if (worker.CancellationPending) progressArgs.Cancel = true; if (progressArgs.EventType == ZipProgressEventType.Saving_BeforeWriteEntry) worker.ReportProgress(progressArgs.EntriesTotal > 0 ? progressArgs.EntriesSaved * 100 / progressArgs.EntriesTotal : 0, $"ƒtƒ@ƒCƒ‹’Ç‰Á’†: {progressArgs.CurrentEntry.FileName}"); else if (progressArgs.EventType == ZipProgressEventType.Saving_AfterWriteEntry) { filesProcessed++; worker.ReportProgress(totalFiles > 0 ? filesProcessed * 100 / totalFiles : 0, $"Š®—¹: {progressArgs.CurrentEntry.FileName}"); } else if (progressArgs.EventType == ZipProgressEventType.Saving_Completed) worker.ReportProgress(100); };
+                        zip.SaveProgress += (s, progressArgs) => { if (worker.CancellationPending) progressArgs.Cancel = true; if (progressArgs.EventType == ZipProgressEventType.Saving_BeforeWriteEntry) worker.ReportProgress(progressArgs.EntriesTotal > 0 ? progressArgs.EntriesSaved * 100 / progressArgs.EntriesTotal : 0, $"ãƒ•ã‚¡ã‚¤ãƒ«è¿½åŠ ä¸­: {progressArgs.CurrentEntry.FileName}"); else if (progressArgs.EventType == ZipProgressEventType.Saving_AfterWriteEntry) { filesProcessed++; worker.ReportProgress(totalFiles > 0 ? filesProcessed * 100 / totalFiles : 0, $"å®Œäº†: {progressArgs.CurrentEntry.FileName}"); } else if (progressArgs.EventType == ZipProgressEventType.Saving_Completed) worker.ReportProgress(100); };
                         foreach (string filePath in args.FilesToCompress) if (File.Exists(filePath)) zip.AddFile(filePath, "");
                         zip.Save();
-                        worker.ReportProgress(100, $"Šù‘¶ZIP '{Path.GetFileName(args.ExistingZipPath)}' ‚Ö‚Ì’Ç‰ÁŠ®—¹B");
+                        worker.ReportProgress(100, $"æ—¢å­˜ZIP '{Path.GetFileName(args.ExistingZipPath)}' ã¸ã®è¿½åŠ å®Œäº†ã€‚");
                     }
                 }
                 e.Result = args.OutputZipPath;
             }
-            catch (Exception ex) { worker.ReportProgress(0, $"ƒGƒ‰[”­¶: {ex.Message}"); e.Result = ex; }
+            catch (Exception ex) { worker.ReportProgress(0, $"ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿ: {ex.Message}"); e.Result = ex; }
         }
         private void CompressionWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
@@ -1073,12 +1073,12 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
         {
             var progressBar = this.Controls.Find("compressionProgressBar", true).FirstOrDefault() as ProgressBar; if (progressBar != null) progressBar.Visible = false;
             var statsLabel = this.Controls.Find("compressionStatsLabel", true).FirstOrDefault() as Label; if (statsLabel != null) statsLabel.Text = "";
-            string operationMessage = "ˆ—";
-            if (argsPassedToWorker != null) operationMessage = (argsPassedToWorker.OperationMode == ZipOperationMode.CreateNew) ? "ˆ³k" : "ƒtƒ@ƒCƒ‹’Ç‰Á";
+            string operationMessage = "å‡¦ç†";
+            if (argsPassedToWorker != null) operationMessage = (argsPassedToWorker.OperationMode == ZipOperationMode.CreateNew) ? "åœ§ç¸®" : "ãƒ•ã‚¡ã‚¤ãƒ«è¿½åŠ ";
 
-            if (e.Error != null) { ShowNotification($"{operationMessage}ƒGƒ‰[: {e.Error.Message}", NotificationType.Error); AppendLog($"{operationMessage}’†‚É—\Šú‚¹‚ÊƒGƒ‰[: {e.Error.ToString()}", LogLevel.Error); }
-            else if (e.Result is Exception ex) { ShowNotification($"{operationMessage}ƒGƒ‰[: {ex.Message}", NotificationType.Error); AppendLog($"{operationMessage}’†‚ÉƒGƒ‰[: {ex.ToString()}", LogLevel.Error); }
-            else if (e.Cancelled) { ShowNotification($"{operationMessage}‚ªƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½B", NotificationType.Info); AppendLog($"{operationMessage}‚ÍƒLƒƒƒ“ƒZƒ‹‚³‚ê‚Ü‚µ‚½B", LogLevel.Warning); }
+            if (e.Error != null) { ShowNotification($"{operationMessage}ã‚¨ãƒ©ãƒ¼: {e.Error.Message}", NotificationType.Error); AppendLog($"{operationMessage}ä¸­ã«äºˆæœŸã›ã¬ã‚¨ãƒ©ãƒ¼: {e.Error.ToString()}", LogLevel.Error); }
+            else if (e.Result is Exception ex) { ShowNotification($"{operationMessage}ã‚¨ãƒ©ãƒ¼: {ex.Message}", NotificationType.Error); AppendLog($"{operationMessage}ä¸­ã«ã‚¨ãƒ©ãƒ¼: {ex.ToString()}", LogLevel.Error); }
+            else if (e.Cancelled) { ShowNotification($"{operationMessage}ãŒã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã¾ã—ãŸã€‚", NotificationType.Info); AppendLog($"{operationMessage}ã¯ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã•ã‚Œã¾ã—ãŸã€‚", LogLevel.Warning); }
             else if (e.Result is string outputZipPath)
             {
                 long originalSize = argsPassedToWorker?.OriginalTotalSize ?? 0; long compressedSize = 0; string displayMessage = "";
@@ -1090,19 +1090,19 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                         if (File.Exists(outputZipPath)) compressedSize += new FileInfo(outputZipPath).Length;
                         int segment = 1;
                         while (true) { string segmentFile = $"{baseName}.z{segment:00}"; if (File.Exists(segmentFile)) { compressedSize += new FileInfo(segmentFile).Length; segment++; } else break; }
-                        displayMessage = $"•ªŠ„{operationMessage}Š®—¹: {Path.GetFileName(outputZipPath)} ‘¼ ({segment - 1}ƒZƒOƒƒ“ƒg)";
+                        displayMessage = $"åˆ†å‰²{operationMessage}å®Œäº†: {Path.GetFileName(outputZipPath)} ä»– ({segment - 1}ã‚»ã‚°ãƒ¡ãƒ³ãƒˆ)";
                     }
-                    else if (File.Exists(outputZipPath)) { compressedSize = new FileInfo(outputZipPath).Length; displayMessage = $"{operationMessage}Š®—¹: {Path.GetFileName(outputZipPath)}"; }
+                    else if (File.Exists(outputZipPath)) { compressedSize = new FileInfo(outputZipPath).Length; displayMessage = $"{operationMessage}å®Œäº†: {Path.GetFileName(outputZipPath)}"; }
                     if (statsLabel != null)
                     {
-                        statsLabel.Text = $"Œ³ƒTƒCƒY: {FormatBytes(originalSize)} ¨ ˆ³kŒãƒTƒCƒY: {FormatBytes(compressedSize)}";
-                        if (originalSize > 0 && argsPassedToWorker?.OperationMode == ZipOperationMode.CreateNew && compressedSize >= 0) { double ratio = (originalSize == 0) ? 0 : (double)compressedSize / originalSize; statsLabel.Text += $" (ˆ³k—¦: {ratio:P0})"; }
-                        else if (originalSize == 0 && compressedSize == 0 && argsPassedToWorker?.OperationMode == ZipOperationMode.CreateNew) { statsLabel.Text += $" (ˆ³k—¦: N/A)"; }
+                        statsLabel.Text = $"å…ƒã‚µã‚¤ã‚º: {FormatBytes(originalSize)} â†’ åœ§ç¸®å¾Œã‚µã‚¤ã‚º: {FormatBytes(compressedSize)}";
+                        if (originalSize > 0 && argsPassedToWorker?.OperationMode == ZipOperationMode.CreateNew && compressedSize >= 0) { double ratio = (originalSize == 0) ? 0 : (double)compressedSize / originalSize; statsLabel.Text += $" (åœ§ç¸®ç‡: {ratio:P0})"; }
+                        else if (originalSize == 0 && compressedSize == 0 && argsPassedToWorker?.OperationMode == ZipOperationMode.CreateNew) { statsLabel.Text += $" (åœ§ç¸®ç‡: N/A)"; }
                         statsLabel.Visible = true;
                     }
                 }
-                catch (Exception statEx) { AppendLog($"ƒtƒ@ƒCƒ‹ƒTƒCƒY“Œv‚Ìæ“¾ƒGƒ‰[: {statEx.Message}", LogLevel.Warning); if (statsLabel != null) statsLabel.Visible = false; }
-                ShowNotification(displayMessage, NotificationType.Success); AppendLog($"ˆ—‚ª³í‚ÉŠ®—¹Bo—Í: {outputZipPath}", LogLevel.Info);
+                catch (Exception statEx) { AppendLog($"ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºçµ±è¨ˆã®å–å¾—ã‚¨ãƒ©ãƒ¼: {statEx.Message}", LogLevel.Warning); if (statsLabel != null) statsLabel.Visible = false; }
+                ShowNotification(displayMessage, NotificationType.Success); AppendLog($"å‡¦ç†ãŒæ­£å¸¸ã«å®Œäº†ã€‚å‡ºåŠ›: {outputZipPath}", LogLevel.Info);
                 if (argsPassedToWorker != null && outputZipPath == argsPassedToWorker.OutputZipPath &&
                    (argsPassedToWorker.OperationMode == ZipOperationMode.CreateNew || argsPassedToWorker.OperationMode == ZipOperationMode.AddToExisting))
                 {
@@ -1114,7 +1114,7 @@ namespace SimpleZipper // ƒvƒƒWƒFƒNƒg‚Ì–¼‘O‹óŠÔ‚É‡‚í‚¹‚Ä‚­‚¾‚³‚¢
                 var outputFolderTb = this.Controls.Find("outputFolderTextBox", true).FirstOrDefault() as TextBox;
                 string folderToOpen = (argsPassedToWorker?.OperationMode == ZipOperationMode.CreateNew && outputFolderTb != null) ? outputFolderTb.Text : Path.GetDirectoryName(argsPassedToWorker?.ExistingZipPath);
                 if ((openFolderCheckBox?.Checked ?? false) && !string.IsNullOrEmpty(folderToOpen) && Directory.Exists(folderToOpen))
-                { try { Process.Start("explorer.exe", folderToOpen); } catch (Exception folderEx) { ShowNotification($"ƒtƒHƒ‹ƒ_‚ğŠJ‚¯‚Ü‚¹‚ñ‚Å‚µ‚½: {folderEx.Message}", NotificationType.Warning); AppendLog($"ƒtƒHƒ‹ƒ_ƒI[ƒvƒ“ƒGƒ‰[: {folderEx.Message}", LogLevel.Warning); } }
+                { try { Process.Start("explorer.exe", folderToOpen); } catch (Exception folderEx) { ShowNotification($"ãƒ•ã‚©ãƒ«ãƒ€ã‚’é–‹ã‘ã¾ã›ã‚“ã§ã—ãŸ: {folderEx.Message}", NotificationType.Warning); AppendLog($"ãƒ•ã‚©ãƒ«ãƒ€ã‚ªãƒ¼ãƒ—ãƒ³ã‚¨ãƒ©ãƒ¼: {folderEx.Message}", LogLevel.Warning); } }
             }
             SetUIEnabledState(true);
         }
