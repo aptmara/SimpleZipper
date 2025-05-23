@@ -62,11 +62,6 @@ namespace SimpleZipper
             AppendLog("アプリケーションを起動しました。", LogLevel.Info);
             InitializeFormDragDropEvents();
 
-            // --- イベントハンドラの明示的な登録 ---
-            // デザイナでの紐付けがうまくいかない場合や、確実に登録するためにコードで追加します。
-            // もしデザイナで正しく紐付けられている場合、これらの行は重複登録になる可能性がありますが、
-            // 通常は問題ありません（複数回呼ばれるだけ）。
-            // エラー解消のため、まずはデザイナの不要な紐付けを削除することを優先してください。
 
             var selectFilesBtn = this.Controls.Find("selectFilesButton", true).FirstOrDefault() as Button;
             if (selectFilesBtn != null) selectFilesBtn.Click += new System.EventHandler(this.selectFilesButton_Click);
