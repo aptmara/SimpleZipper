@@ -2,7 +2,7 @@
 
 public class ThemeColors
 {
-    public string Name { get; set; }
+    public string? Name { get; set; }
     public Color FormBackColor { get; set; }
     public Color FormForeColor { get; set; }
     public Color ButtonBackColor { get; set; }

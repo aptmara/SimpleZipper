@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SimpleZipper
+namespace SimpleZipper // ★ あなたのプロジェクトの名前空間に合わせてください
 {
     static class Program
     {
