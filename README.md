@@ -70,7 +70,7 @@ SimpleZipperは、ファイルやフォルダを簡単にZIP形式に圧縮し�
 
 ## ライセンス
 
-このプロジェクトは [（MIT License）](#license) の下で公開されています。詳細は `LICENSE` ファイルをご覧ください。
+このプロジェクトは [MIT License](#license) の下で公開されています。詳細は `LICENSE` ファイルをご覧ください。
 
 ## 謝辞
 
